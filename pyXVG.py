@@ -46,9 +46,9 @@ def read_xvg(filename, save_metadata = True) :
                 splitRowData =  list(filter(None, line.split(" ")))
                 data.append(splitRowData)
     dataset = pandas.DataFrame(data, columns=legend, dtype='float64')
-    return({'data' : dataset, 'label' : label, 'meta' : meta})
+    return({'data' : dataset, 'label' : label, 'meta' : meta, 'legend' : legend})
 
-def plot_xvg(xvgdata, xlab = None, ylab = None, title = None, legend = None):
+def plot_xvg(xvgdata, xlab = None, ylab = None, title = None, legend = None, average=False):
     if title == None :
         title = xvgdata['label']['title']
     if xlab == None :
@@ -57,9 +57,16 @@ def plot_xvg(xvgdata, xlab = None, ylab = None, title = None, legend = None):
         ylab = xvgdata['label']['ylab']
     if legend == None :
         legend = xvgdata['data'].iloc[:,1:].columns
-    plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1:])
+    #plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1:])
+    #plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1], label = xvgdata['legend'][1])
+    #plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1].rolling(window=20).mean(), label = "average" + xvgdata['legend'][1])
+    for ycol in xvgdata['legend']:
+        if not ycol == "x": 
+            plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'][ycol], label = ycol)
+            if average == True :
+                plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'][ycol].rolling(window=20).mean(), label = "average " + ycol)
     plt.xlabel(xlab)
     plt.ylabel(ylab)
     plt.title(title)
-    plt.gca().legend(legend)
+    plt.legend()
     plt.show()  
