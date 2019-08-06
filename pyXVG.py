@@ -6,7 +6,6 @@ try:
     import matplotlib.pyplot as plt
     import numpy as np
 except ImportError as e:
-    print('[!] The required Python libraries could not be imported:', file=sys.stderr)
     print('\t{0}'.format(e))
     sys.exit(1)
 
