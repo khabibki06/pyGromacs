@@ -35,9 +35,8 @@ def read_xvg(filename, save_metadata = True) :
                 splitRowData =  list(filter(None, line.split(" ")))
                 data.append(splitRowData)
     dataset = pandas.DataFrame(data, columns=[label['xlab'], label['ylab']], dtype='float64')
-    return({'data' : dataset, 'label' : label, 'meta' : meta})me(data, columns=label[1:], dtype='float64')
+    return({'data' : dataset, 'label' : label, 'meta' : meta})
 
- 
 def plot_xvg(xvgdata, xlab = None, ylab = None, title = None):
     if title == None :
         title = xvgdata['label']['title']
