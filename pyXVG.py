@@ -10,42 +10,43 @@ except ImportError as e:
     print('\t{0}'.format(e))
     sys.exit(1)
 
-
-def read_xvg(filename) :
-    label = []
+def read_xvg(filename, save_metadata = True) :
+    label = dict()
     data = []
+    meta = []
     with open(filename) as f:
         lineList = f.readlines()
         for line in lineList :
             if line.startswith("@") :
                 if "title" in line :
                     title = line.split("title")[1].replace('\"','').strip()
-                    label.insert(0, title )
+                    label['title'] = title
                 if "xaxis" in line :
                     xlab = line.split("label")[1].replace('\"','').strip()
-                    label.insert(1, xlab )
+                    label['xlab'] = xlab
                 if "yaxis" in line :
                     ylab = line.split("label")[1].replace('\"','').strip()
-                    label.insert(2, ylab)
+                    label['ylab'] = ylab
+            elif line.startswith("#"):
+                if save_metadata == True: 
+                    meta.append(line.strip())
             else :
-                if not line.startswith("#"):
-                    line = line.strip()
-                    splitRowData =  list(filter(None, line.split(" ")))
-                    data.append(splitRowData)
-    dataset = pandas.DataFrame(data, columns=label[1:], dtype='float64')
-    return([dataset, label])
+                line = line.strip()
+                splitRowData =  list(filter(None, line.split(" ")))
+                data.append(splitRowData)
+    dataset = pandas.DataFrame(data, columns=[label['xlab'], label['ylab']], dtype='float64')
+    return({'data' : dataset, 'label' : label, 'meta' : meta})me(data, columns=label[1:], dtype='float64')
+
  
- def plot_xvg(xvgdata, xlab = None, ylab = None, title = None):
+def plot_xvg(xvgdata, xlab = None, ylab = None, title = None):
     if title == None :
-        title = xvgdata[1][0]
+        title = xvgdata['label']['title']
     if xlab == None :
-        xlab = xvgdata[1][1]
+        xlab = xvgdata['label']['xlab']
     if ylab == None :
-        ylab = xvgdata[1][2]
-    plt.plot(xvgdata[0].iloc[:,0], xvgdata[0].iloc[:,1])
+        ylab = xvgdata['label']['ylab']
+    plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1])
     plt.xlabel(xlab)
     plt.ylabel(ylab)
     plt.title(title)
-    plt.show()
-    
-    
+    plt.show()   
