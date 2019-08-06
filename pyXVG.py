@@ -9,6 +9,14 @@ except ImportError as e:
     print('\t{0}'.format(e))
     sys.exit(1)
 
+def math_exp(text):
+    output = []
+    txt_split = text.split(" ")
+    for string in txt_split:
+        stringmath = "$" + string + "$"
+        output.append(stringmath)
+    return(" ".join(output))
+
 def read_xvg(filename, save_metadata = True) :
     label = dict()
     data = []
@@ -23,10 +31,10 @@ def read_xvg(filename, save_metadata = True) :
                     label['title'] = title
                 if "xaxis" in line :
                     xlab = line.split("label")[1].replace('\"','').strip()
-                    label['xlab'] = xlab
+                    label['xlab'] = math_exp(xlab)
                 if "yaxis" in line :
                     ylab = line.split("label")[1].replace('\"','').strip()
-                    label['ylab'] = ylab
+                    label['ylab'] = math_exp(ylab)
                 if "@ s" in line : 
                     y_legend = line.split("legend")[1].replace('\"','').strip()
                     legend.append(y_legend)
