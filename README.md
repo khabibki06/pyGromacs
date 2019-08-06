@@ -10,9 +10,9 @@ cluster = read_xvg("filename.xvg")
 by default, this function stores the metadata infomation. it can be disabled by set save_metadata = False
 
 the output variable is a dictionary containing three keys:
-a. data = a dataframe of numeric data
-b. label = the label infomation about title, xlab, ylab, plot type
-c. meta = metadata
+1. data = a dataframe of numeric data
+2. label = the label infomation about title, xlab, ylab, plot type
+3. meta = metadata
 
 2. plot_xvg 
 this function is used to plot the output of read_xvg
