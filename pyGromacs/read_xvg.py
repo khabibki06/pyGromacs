@@ -48,6 +48,8 @@ class xvgData:
     def to_csv(self, filename, sep=",", dec="."):
         self.data.to_csv(filename, sep=sep, decimal=dec, index=False)
         
+    def append(self, xvgdata):
+        self.data = pandas.concat([self.data, xvgdata.data.reset_index(drop=True)], axis=1)
 
 def math_exp(text):
         if "\\xl\\f{}" in text:
