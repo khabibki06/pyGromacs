@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='Python Gromacs',
+    name='pyGromacs',
     url='https://github.com/khabibki06/pyGromacs',
     author='khabib khumaini',
     author_email='khabibki06@gmail.com',
