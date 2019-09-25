@@ -33,7 +33,7 @@ class xvgData:
                 if not ycol == "x": 
                     plt.plot(self.data.iloc[:,0], self.data[ycol], label = ycol)
                     if average == True:
-                        plt.plot(self.data.iloc[:,0], self.data[ycol].rolling(window=20).mean(), label = ycol + " (average " + str(averageTimeStep) + ")" )
+                        plt.plot(self.data.iloc[:,0], self.data[ycol].rolling(window=averageTrue).mean(), label = ycol + " (average " + str(averageTimeStep) + ")" )
             plt.legend()
         if self.plotType == 'xydy':
             plt.errorbar(self.data.iloc[:,0], self.data.iloc[:,1], yerr = self.data.iloc[:,2], capsize=5)    
