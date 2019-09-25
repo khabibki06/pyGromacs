@@ -8,12 +8,47 @@ except ImportError as e:
     print('\t{0}'.format(e))
     sys.exit(1)
     
+class xvgData:
+    
+    def __init__(self, data, label, meta, legend, plotType):
+        self.data = data
+        self.label = label
+        self.meta = meta
+        self.legend = legend
+        self.plotType = plotType
+
+    def plot(self, xlab = None, ylab = None, title = None, legend = None, average=False, averageScale=20):
+        if title == None :
+            title = self.label['title']
+        if xlab == None :
+            xlab = self.label['xlab']
+        if ylab == None :
+            ylab = self.label['ylab']
+        if legend == None :
+            legend = self.data.iloc[:,1:].columns
+        if self.plotType == 'xy':
+            if average == True:
+                averageTimeStep = averageScale * (self.data.iloc[1,0]- self.data.iloc[0,0])
+            for ycol in self.legend :
+                if not ycol == "x": 
+                    plt.plot(self.data.iloc[:,0], self.data[ycol], label = ycol)
+                    if average == True:
+                        plt.plot(self.data.iloc[:,0], self.data[ycol].rolling(window=20).mean(), label = ycol + " (average " + str(averageTimeStep) + ")" )
+            plt.legend()
+        if self.plotType == 'xydy':
+            plt.errorbar(self.data.iloc[:,0], self.data.iloc[:,1], yerr = self.data.iloc[:,2], capsize=5)    
+        plt.title(title)
+        plt.xlabel(xlab)
+        plt.ylabel(ylab)
+        plt.show()
+        
+
 def math_exp(text):
-    if "\\xl\\f{}" in text:
-        text = text.replace("\\xl\\f{}", "$\\lambda$")
-    if "\\xD\\f{}" in text:
-        text = text.replace("\\xD\\f{}", "$\\Delta$")
-    return text
+        if "\\xl\\f{}" in text:
+            text = text.replace("\\xl\\f{}", "$\\lambda$")
+        if "\\xD\\f{}" in text:
+            text = text.replace("\\xD\\f{}", "$\\Delta$")
+        return text
 
 def read_xvg(filename, save_metadata = True) :
     label = dict()
@@ -49,29 +84,4 @@ def read_xvg(filename, save_metadata = True) :
     if plotType == "xydy" :
         legend = legend + ["y", "dy"]
     dataset = pandas.DataFrame(data, columns=legend, dtype='float64')
-    return({'data' : dataset, 'label' : label, 'meta' : meta, 'legend' : legend, "plotType" : plotType})
-
-def plot_xvg(xvgdata, xlab = None, ylab = None, title = None, legend = None, average=False, averageScale=20):
-    if title == None :
-        title = xvgdata['label']['title']
-    if xlab == None :
-        xlab = xvgdata['label']['xlab']
-    if ylab == None :
-        ylab = xvgdata['label']['ylab']
-    if legend == None :
-        legend = xvgdata['data'].iloc[:,1:].columns
-    if xvgdata['plotType'] == 'xy':
-        if average == True:
-            averageTimeStep = averageScale * (xvgdata['data'].iloc[1,0]- xvgdata['data'].iloc[0,0])
-        for ycol in xvgdata['legend']:
-            if not ycol == "x": 
-                plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'][ycol], label = ycol)
-                if average == True:
-                    plt.plot(xvgdata['data'].iloc[:,0], xvgdata['data'][ycol].rolling(window=20).mean(), label = ycol + " (average " + str(averageTimeStep) + ")" )
-        plt.legend()
-    if xvgdata['plotType'] == 'xydy':
-        plt.errorbar(xvgdata['data'].iloc[:,0], xvgdata['data'].iloc[:,1], yerr = xvgdata['data'].iloc[:,2], capsize=5)    
-    plt.title(title)
-    plt.xlabel(xlab)
-    plt.ylabel(ylab)
-    plt.show()  
+    return xvgData(dataset, label, meta, legend, plotType)
