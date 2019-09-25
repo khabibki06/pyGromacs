@@ -1,1 +1,1 @@
-import pyXVG
+import py_xvg
