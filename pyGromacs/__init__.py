@@ -1,1 +1,1 @@
-import pyGromacs.read_xvg
+import pyGromacs.xvg
