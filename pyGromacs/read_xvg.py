@@ -1,3 +1,13 @@
+import sys
+
+try:
+    import pandas
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ImportError as e:
+    print('\t{0}'.format(e))
+    sys.exit(1)
+    
 def math_exp(text):
     if "\\xl\\f{}" in text:
         text = text.replace("\\xl\\f{}", "$\\lambda$")
