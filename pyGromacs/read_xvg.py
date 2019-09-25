@@ -42,6 +42,12 @@ class xvgData:
         plt.ylabel(ylab)
         plt.show()
         
+    def get_pandas(self):
+        return self.data
+    
+    def to_csv(self, filename, sep=",", dec="."):
+        self.data.to_csv(filename, sep=sep, decimal=dec, index=False)
+        
 
 def math_exp(text):
         if "\\xl\\f{}" in text:
