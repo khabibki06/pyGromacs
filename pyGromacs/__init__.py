@@ -1,2 +1,2 @@
-import PyXvg
+import pyXvg
 
