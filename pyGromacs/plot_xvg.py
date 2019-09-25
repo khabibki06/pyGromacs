@@ -1,3 +1,13 @@
+import sys
+
+try:
+    import pandas
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ImportError as e:
+    print('\t{0}'.format(e))
+    sys.exit(1)
+
 def plot_xvg(xvgdata, xlab = None, ylab = None, title = None, legend = None, average=False, averageScale=20):
     if title == None :
         title = xvgdata['label']['title']
